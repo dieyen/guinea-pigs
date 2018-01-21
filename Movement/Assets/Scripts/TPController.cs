@@ -19,6 +19,7 @@ public class TPController : MonoBehaviour {
 		}
 
 		GetLocomotionInput ();
+		HandleActionInput ();
 
 		TPMotor.Instance.UpdateMotor ();
 	}
@@ -26,6 +27,7 @@ public class TPController : MonoBehaviour {
 	void GetLocomotionInput (){
 		var deadZone = 0.1f;
 
+		TPMotor.Instance.VerticalVelocity = TPMotor.Instance.MoveVector.y;
 		TPMotor.Instance.MoveVector = Vector3.zero;
 
 		if (Input.GetAxis ("Vertical") > deadZone || Input.GetAxis("Vertical")  < -deadZone) {
@@ -35,5 +37,15 @@ public class TPController : MonoBehaviour {
 		if (Input.GetAxis ("Horizontal") > deadZone || Input.GetAxis("Horizontal")  < -deadZone) {
 			TPMotor.Instance.MoveVector += new Vector3 (Input.GetAxis ("Horizontal"), 0, 0);
 		}
+	}
+
+	void HandleActionInput(){
+		if (Input.GetButton ("Jump")) {
+			Jump ();
+		}
+	}
+
+	void Jump(){
+		TPMotor.Instance.Jump();
 	}
 }

@@ -10,6 +10,7 @@ public class TPCamera : MonoBehaviour {
 	public float DistanceMin = 3f;
 	public float DistanceMax = 10f;
 	public float DistanceSmooth = 0.05f;
+	public float speed = 10.0f;
 
 	//sets mouse input sensitivity
 	public float XMouseSensitivity = 5f;
@@ -44,6 +45,16 @@ public class TPCamera : MonoBehaviour {
 		Reset ();
 	}
 
+	void Update(){
+		// Camera movement by mouse movement
+		if (Input.GetAxis ("Mouse X") > 0) {
+			transform.position += new Vector3 (Input.GetAxisRaw ("Mouse X") * Time.deltaTime * speed,
+				0.0f, Input.GetAxisRaw ("Mouse Y") * Time.deltaTime * speed);
+		} else if (Input.GetAxis ("Mouse X") < 0) {
+			transform.position += new Vector3 (Input.GetAxisRaw ("Mouse X") * Time.deltaTime * speed,
+				0.0f, Input.GetAxisRaw ("Mouse Y") * Time.deltaTime * speed);
+		}
+	}
 	void LateUpdate () {
 		if (TargetLookAt == null) {
 			return;
@@ -57,11 +68,14 @@ public class TPCamera : MonoBehaviour {
 	void HandlePlayerInput (){
 		var deadZone = 0.01f;
 
+		//Camera movement by right-clicking
 		if (Input.GetMouseButton (1)) {
 			//RMB is on hold, get mouse axis input
 			mouseX += Input.GetAxis ("Mouse X") * XMouseSensitivity;
 			mouseY -= Input.GetAxis ("Mouse Y") * YMouseSensitivity;
 		}
+
+
 		//Clamps mouse's Y-axis to set limits
 		mouseY = Helper.ClampAngle (mouseY, YMinLimit, YMaxLimit);
 
